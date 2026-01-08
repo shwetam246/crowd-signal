@@ -64,7 +64,13 @@ export function useFeedbackSimulation(simulationSpeed: number = 2000) {
   const [activePoll, setActivePoll] = useState<Poll | null>(null);
   const [newHighIntent, setNewHighIntent] = useState<string | null>(null);
   
+  // Energy system
+  const [energyScore, setEnergyScore] = useState(25);
+  const [acknowledgeFlash, setAcknowledgeFlash] = useState(false);
+  const [lastAcknowledged, setLastAcknowledged] = useState<number | null>(null);
+  
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const energyDecayRef = useRef<NodeJS.Timeout | null>(null);
 
   // Generate random feedback
   const generateFeedback = useCallback((): FeedbackItem => {
@@ -110,6 +116,31 @@ export function useFeedbackSimulation(simulationSpeed: number = 2000) {
     addFeedback(feedback);
   }, [addFeedback]);
 
+  // Energy boost from audience
+  const boostEnergy = useCallback(() => {
+    setEnergyScore(prev => Math.min(100, prev + 3));
+  }, []);
+
+  // Producer acknowledge signal
+  const sendAcknowledge = useCallback(() => {
+    setAcknowledgeFlash(true);
+    setLastAcknowledged(Date.now());
+    setTimeout(() => setAcknowledgeFlash(false), 500);
+  }, []);
+
+  // Energy decay over time
+  useEffect(() => {
+    energyDecayRef.current = setInterval(() => {
+      setEnergyScore(prev => Math.max(10, prev - 1));
+    }, 2000);
+
+    return () => {
+      if (energyDecayRef.current) {
+        clearInterval(energyDecayRef.current);
+      }
+    };
+  }, []);
+
   // Update rankings whenever feedback changes
   useEffect(() => {
     const ranked = getRankedDecisions(feedbackItems, noiseGateEnabled);
@@ -123,6 +154,11 @@ export function useFeedbackSimulation(simulationSpeed: number = 2000) {
       intervalRef.current = setInterval(() => {
         const newFeedback = generateFeedback();
         addFeedback(newFeedback);
+        
+        // Random energy boost from simulated audience
+        if (Math.random() > 0.7) {
+          setEnergyScore(prev => Math.min(100, prev + Math.floor(Math.random() * 5)));
+        }
       }, simulationSpeed + Math.random() * 1000);
     }
 
@@ -182,6 +218,12 @@ export function useFeedbackSimulation(simulationSpeed: number = 2000) {
     votePoll,
     closePoll,
     clearPoll,
-    newHighIntent
+    newHighIntent,
+    // Energy system
+    energyScore,
+    boostEnergy,
+    acknowledgeFlash,
+    sendAcknowledge,
+    lastAcknowledged
   };
 }

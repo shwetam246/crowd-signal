@@ -56,6 +56,14 @@
     --studio-waveform: 185 60% 60%;
     --studio-glow: 185 100% 60%;
 
+    /* Energy gradient colors */
+    --energy-low: 222 20% 8%;
+    --energy-medium: 260 30% 15%;
+    --energy-high: 270 50% 18%;
+    --energy-peak: 270 60% 22%;
+    --energy-purple: 270 60% 55%;
+    --energy-cyan: 185 70% 50%;
+
     /* Noise gate colors */
     --noise-high-intent: 150 65% 45%;
     --noise-low-intent: 222 15% 35%;
@@ -243,5 +251,39 @@
 
   .glow-success {
     box-shadow: 0 0 15px -5px hsl(var(--success) / 0.5);
+  }
+
+  /* Acknowledge flash animation */
+  @keyframes acknowledge-flash {
+    0% {
+      opacity: 0;
+      background-color: hsl(var(--primary));
+    }
+    30% {
+      opacity: 0.6;
+      background-color: hsl(var(--primary));
+    }
+    100% {
+      opacity: 0;
+      background-color: transparent;
+    }
+  }
+
+  .acknowledge-flash {
+    animation: acknowledge-flash 0.5s ease-out forwards;
+  }
+
+  /* Energy pulse for high-energy state */
+  @keyframes energy-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(var(--energy-purple) / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(var(--energy-purple) / 0.5);
+    }
+  }
+
+  .energy-high-pulse {
+    animation: energy-pulse 2s ease-in-out infinite;
   }
 }
