@@ -2,95 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Studio-Grade Dark Theme - Ableton/Logic Inspired */
+    --background: 222 20% 7%;
+    --foreground: 210 20% 92%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222 18% 10%;
+    --card-foreground: 210 20% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 222 18% 12%;
+    --popover-foreground: 210 20% 92%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Cyan accent - studio active state */
+    --primary: 185 70% 50%;
+    --primary-foreground: 222 20% 7%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 222 15% 15%;
+    --secondary-foreground: 210 15% 75%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 222 15% 18%;
+    --muted-foreground: 215 15% 55%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 185 60% 45%;
+    --accent-foreground: 222 20% 7%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 210 20% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Success/High-intent green */
+    --success: 150 60% 45%;
+    --success-foreground: 222 20% 7%;
+
+    /* Warning/Medium-intent amber */
+    --warning: 38 90% 55%;
+    --warning-foreground: 222 20% 7%;
+
+    --border: 222 15% 20%;
+    --input: 222 15% 15%;
+    --ring: 185 70% 50%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Studio-specific colors */
+    --studio-surface: 222 18% 9%;
+    --studio-panel: 222 16% 12%;
+    --studio-highlight: 185 70% 50%;
+    --studio-meter-green: 150 70% 50%;
+    --studio-meter-yellow: 45 90% 55%;
+    --studio-meter-red: 0 70% 55%;
+    --studio-waveform: 185 60% 60%;
+    --studio-glow: 185 100% 60%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Noise gate colors */
+    --noise-high-intent: 150 65% 45%;
+    --noise-low-intent: 222 15% 35%;
 
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 222 18% 8%;
+    --sidebar-foreground: 210 15% 80%;
+    --sidebar-primary: 185 70% 50%;
+    --sidebar-primary-foreground: 222 20% 7%;
+    --sidebar-accent: 222 15% 15%;
+    --sidebar-accent-foreground: 210 15% 80%;
+    --sidebar-border: 222 15% 18%;
+    --sidebar-ring: 185 70% 50%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 222 20% 7%;
+    --foreground: 210 20% 92%;
   }
 }
 
@@ -100,6 +82,166 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Monospace for technical data */
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* Studio Panel Styles */
+  .studio-panel {
+    @apply bg-card border border-border rounded-lg;
+    box-shadow: 
+      inset 0 1px 0 0 hsl(var(--border) / 0.3),
+      0 4px 20px -4px hsl(222 50% 3% / 0.5);
+  }
+
+  .studio-panel-header {
+    @apply px-4 py-2.5 border-b border-border bg-muted/30 rounded-t-lg;
+  }
+
+  /* Glow effect for high-intent feedback */
+  .high-intent-glow {
+    box-shadow: 
+      0 0 20px -5px hsl(var(--studio-glow) / 0.4),
+      0 0 40px -10px hsl(var(--studio-glow) / 0.2);
+    border-color: hsl(var(--studio-highlight) / 0.5);
+  }
+
+  /* Audio meter styling */
+  .audio-meter {
+    @apply h-2 rounded-full overflow-hidden bg-muted;
+  }
+
+  .audio-meter-fill {
+    @apply h-full rounded-full transition-all duration-75;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--studio-meter-green)) 0%,
+      hsl(var(--studio-meter-green)) 60%,
+      hsl(var(--studio-meter-yellow)) 80%,
+      hsl(var(--studio-meter-red)) 100%
+    );
+  }
+
+  /* Confidence bar */
+  .confidence-bar {
+    @apply h-1.5 rounded-full overflow-hidden bg-muted/50;
+  }
+
+  .confidence-fill {
+    @apply h-full rounded-full transition-all duration-300;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--primary) / 0.6),
+      hsl(var(--primary))
+    );
+  }
+
+  /* Waveform placeholder */
+  .waveform-container {
+    @apply relative h-20 rounded-lg overflow-hidden;
+    background: 
+      repeating-linear-gradient(
+        90deg,
+        hsl(var(--studio-waveform) / 0.15) 0px,
+        hsl(var(--studio-waveform) / 0.15) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+  }
+
+  /* Poll option button */
+  .poll-option {
+    @apply relative px-6 py-4 rounded-lg border-2 border-border bg-card 
+           transition-all duration-200 cursor-pointer;
+  }
+
+  .poll-option:hover {
+    @apply border-primary/50 bg-primary/5;
+  }
+
+  .poll-option.selected {
+    @apply border-primary bg-primary/10;
+    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.4);
+  }
+
+  /* Ranking table row */
+  .ranking-row {
+    @apply px-4 py-3 border-b border-border/50 transition-all duration-200;
+  }
+
+  .ranking-row:hover {
+    @apply bg-muted/30;
+  }
+
+  .ranking-row.highlighted {
+    @apply bg-primary/10;
+    animation: highlight-pulse 2s ease-out;
+  }
+
+  @keyframes highlight-pulse {
+    0% {
+      background-color: hsl(var(--primary) / 0.25);
+      box-shadow: inset 0 0 20px hsl(var(--primary) / 0.2);
+    }
+    100% {
+      background-color: hsl(var(--primary) / 0.1);
+      box-shadow: none;
+    }
+  }
+
+  /* Badge styles */
+  .intent-badge {
+    @apply px-2 py-0.5 rounded text-xs font-medium;
+  }
+
+  .intent-badge.high {
+    @apply bg-success/20 text-[hsl(var(--success))];
+  }
+
+  .intent-badge.medium {
+    @apply bg-warning/20 text-[hsl(var(--warning))];
+  }
+
+  .intent-badge.low {
+    @apply bg-muted text-muted-foreground;
+  }
+
+  /* Mobile touch-optimized buttons */
+  .touch-button {
+    @apply min-h-[48px] min-w-[48px] flex items-center justify-center 
+           rounded-xl active:scale-95 transition-transform;
+  }
+}
+
+@layer utilities {
+  .text-studio-highlight {
+    color: hsl(var(--studio-highlight));
+  }
+
+  .bg-studio-surface {
+    background-color: hsl(var(--studio-surface));
+  }
+
+  .bg-studio-panel {
+    background-color: hsl(var(--studio-panel));
+  }
+
+  .border-studio {
+    border-color: hsl(var(--border));
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.5);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 15px -5px hsl(var(--success) / 0.5);
   }
 }
