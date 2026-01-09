@@ -26,26 +26,64 @@ export interface RankedDecision {
   isHighlighted: boolean;
 }
 
-// Technical audio terms for intent detection
+// Expanded technical audio terms for enhanced noise gate
 const TECHNICAL_TERMS = [
-  'compression', 'reverb', 'delay', 'eq', 'equalizer', 'bass', 'treble',
-  'mid', 'high-end', 'low-end', 'sidechain', 'limiter', 'saturation',
+  // Core Mixing Terms
+  'compression', 'compressor', 'reverb', 'delay', 'eq', 'equalizer', 'bass', 'treble',
+  'mid', 'midrange', 'high-end', 'low-end', 'sidechain', 'limiter', 'saturation',
   'distortion', 'filter', 'cutoff', 'resonance', 'attack', 'release',
-  'threshold', 'ratio', 'gain', 'volume', 'pan', 'stereo', 'mono',
-  'kick', 'snare', 'hi-hat', 'synth', 'pad', 'lead', 'bassline',
-  'drop', 'build', 'breakdown', 'verse', 'chorus', 'bridge',
-  'bpm', 'tempo', 'key', 'melody', 'harmony', 'chord', 'arpeggio',
-  'modulation', 'lfo', 'envelope', 'oscillator', 'wavetable',
-  'sample', 'loop', 'transient', 'sustain', 'decay', 'adsr',
-  'db', 'decibel', 'frequency', 'hz', 'khz', 'spectrum',
-  'muddy', 'crisp', 'punchy', 'warm', 'bright', 'dark', 'harsh'
+  'threshold', 'ratio', 'gain', 'volume', 'pan', 'panning', 'stereo', 'mono',
+  
+  // Drums & Percussion
+  'kick', 'snare', 'hi-hat', 'hihat', 'cymbal', 'clap', 'percussion', 'drum', 'drums',
+  'transient', 'punch', 'snap', 'thump',
+  
+  // Synths & Sound Design
+  'synth', 'synthesizer', 'pad', 'lead', 'pluck', 'arp', 'arpeggio', 'bassline',
+  'oscillator', 'osc', 'wavetable', 'lfo', 'envelope', 'adsr', 'modulation',
+  'filter sweep', 'wobble', 'growl',
+  
+  // Arrangement & Structure
+  'drop', 'build', 'buildup', 'breakdown', 'verse', 'chorus', 'bridge', 'intro', 'outro',
+  'transition', 'fill', 'riser', 'impact', 'tension', 'release',
+  
+  // Frequency & Spectrum
+  'frequency', 'hz', 'khz', 'spectrum', 'bandwidth', 'q', 'shelf', 'notch', 'peak',
+  'sub', 'sub-bass', 'presence', 'air', 'sparkle', 'body', 'warmth',
+  
+  // Dynamics & Levels
+  'db', 'decibel', 'lufs', 'rms', 'peak', 'headroom', 'dynamic', 'dynamics',
+  'louder', 'quieter', 'boost', 'cut', 'reduce', 'increase',
+  
+  // Effects & Processing
+  'chorus', 'flanger', 'phaser', 'bitcrusher', 'vocoder', 'pitch', 'detune',
+  'doubling', 'parallel', 'wet', 'dry', 'send', 'return', 'bus',
+  'de-esser', 'de-essing', 'multiband', 'sibilance',
+  
+  // Spatial & Stereo
+  'stereo width', 'width', 'narrow', 'wide', 'mono', 'phase', 'imaging',
+  'depth', 'space', 'room', 'hall', 'plate', 'ambient',
+  
+  // Descriptive Audio Terms
+  'muddy', 'crisp', 'punchy', 'warm', 'bright', 'dark', 'harsh', 'thin',
+  'fat', 'thick', 'clean', 'dirty', 'gritty', 'smooth', 'sharp', 'dull',
+  'boomy', 'boxy', 'nasal', 'airy', 'tight', 'loose',
+  
+  // Vocals
+  'vocal', 'vocals', 'vox', 'voice', 'lyrics', 'verse', 'hook',
+  
+  // Technical Actions
+  'automate', 'automation', 'sidechain', 'ducking', 'gating', 'noise gate',
+  'sample', 'loop', 'chop', 'slice', 'bounce', 'render'
 ];
 
 // Low-intent noise patterns
 const NOISE_PATTERNS = [
   'lfg', 'fire', 'lit', 'goat', 'vibes', 'sick', 'dope', 'insane',
-  'crazy', 'amazing', 'love it', 'yes', 'no', 'wow', 'omg',
-  '🔥', '💯', '🎵', '🎶', '❤️', '👏', '🙌', '💪'
+  'crazy', 'amazing', 'love it', 'yes', 'no', 'wow', 'omg', 'lol',
+  'nice', 'cool', 'good', 'great', 'awesome', 'perfect', 'beautiful',
+  '🔥', '💯', '🎵', '🎶', '❤️', '👏', '🙌', '💪', '😍', '🤩', '💥', '🚀',
+  'w', 'dub', 'lets go', "let's go", 'go off', 'sheesh', 'bussin'
 ];
 
 /**
@@ -59,21 +97,28 @@ export function analyzeTechnicalDepth(text: string): number {
   TECHNICAL_TERMS.forEach(term => {
     if (lowerText.includes(term)) {
       matchedTerms++;
-      score += 15; // Each technical term adds weight
+      score += 12; // Each technical term adds weight
     }
   });
 
   // Bonus for specific numeric values (e.g., "reduce by 3db", "at 120hz")
   const hasNumbers = /\d+\s*(db|hz|khz|bpm|ms|%)/i.test(text);
-  if (hasNumbers) score += 25;
+  if (hasNumbers) score += 30;
 
   // Bonus for comparative language
-  const hasComparison = /(more|less|too|reduce|increase|lower|higher|boost|cut)/i.test(text);
+  const hasComparison = /(more|less|too much|too little|reduce|increase|lower|higher|boost|cut|needs?|try|add|remove)/i.test(text);
   if (hasComparison) score += 15;
 
-  // Bonus for specific suggestions
-  const hasSpecific = /(try|maybe|could|should|consider)/i.test(text);
-  if (hasSpecific) score += 10;
+  // Bonus for specific suggestions with "at" or location context
+  const hasLocation = /(at|around|in the|on the|during|after|before)/i.test(text);
+  if (hasLocation) score += 10;
+
+  // Bonus for actionable suggestions
+  const hasAction = /(try|maybe|could|should|consider|suggest|would|automate|sidechain)/i.test(text);
+  if (hasAction) score += 10;
+
+  // Extra bonus for multiple technical terms
+  if (matchedTerms >= 3) score += 15;
 
   return Math.min(100, score);
 }
@@ -90,11 +135,15 @@ export function classifyIntent(text: string): IntentLevel {
   );
   
   // Very short messages with only noise are low intent
-  if (text.length < 10 && isNoise) return 'low';
+  if (text.length < 12 && isNoise) return 'low';
+  
+  // Pure emoji messages are low intent
+  const emojiOnly = /^[\p{Emoji}\s]+$/u.test(text);
+  if (emojiOnly) return 'low';
   
   const technicalScore = analyzeTechnicalDepth(text);
   
-  if (technicalScore >= 40) return 'high';
+  if (technicalScore >= 35) return 'high';
   if (technicalScore >= 15) return 'medium';
   return 'low';
 }
@@ -105,15 +154,16 @@ export function classifyIntent(text: string): IntentLevel {
 export function categorizeFeedback(text: string): string {
   const lowerText = text.toLowerCase();
   
-  if (/bass|low-end|sub|kick/i.test(lowerText)) return 'Low End';
-  if (/high|treble|bright|crisp|hi-hat/i.test(lowerText)) return 'High End';
-  if (/mid|presence|vocal/i.test(lowerText)) return 'Mids';
-  if (/compress|dynamic|punch/i.test(lowerText)) return 'Dynamics';
-  if (/reverb|delay|space|room/i.test(lowerText)) return 'Space/FX';
-  if (/mix|balance|level|volume/i.test(lowerText)) return 'Mix Balance';
-  if (/synth|lead|pad|sound design/i.test(lowerText)) return 'Sound Design';
-  if (/arrangement|structure|drop|build/i.test(lowerText)) return 'Arrangement';
-  if (/tempo|bpm|speed|faster|slower/i.test(lowerText)) return 'Tempo';
+  if (/bass|low-end|sub|kick|low freq|808|thump/i.test(lowerText)) return 'Low End';
+  if (/high|treble|bright|crisp|hi-hat|hihat|air|sparkle|sibilant/i.test(lowerText)) return 'High End';
+  if (/mid|presence|vocal|voice|body|nasal|boxy/i.test(lowerText)) return 'Mids/Vocals';
+  if (/compress|dynamic|punch|transient|limiter|louder/i.test(lowerText)) return 'Dynamics';
+  if (/reverb|delay|space|room|hall|ambient|wet|dry/i.test(lowerText)) return 'Space/FX';
+  if (/mix|balance|level|volume|too loud|too quiet/i.test(lowerText)) return 'Mix Balance';
+  if (/synth|lead|pad|sound design|oscillator|wavetable/i.test(lowerText)) return 'Sound Design';
+  if (/arrangement|structure|drop|build|breakdown|transition|riser/i.test(lowerText)) return 'Arrangement';
+  if (/tempo|bpm|speed|faster|slower|groove|swing/i.test(lowerText)) return 'Tempo/Groove';
+  if (/stereo|width|pan|imaging|mono|phase/i.test(lowerText)) return 'Stereo Image';
   
   return 'General';
 }
@@ -126,11 +176,12 @@ export function calculateRecencyBoost(timestamp: number): number {
   const now = Date.now();
   const ageSeconds = (now - timestamp) / 1000;
   
-  if (ageSeconds <= 30) return 100;
-  if (ageSeconds <= 60) return 80;
-  if (ageSeconds <= 120) return 60;
-  if (ageSeconds <= 300) return 40;
-  return 20;
+  if (ageSeconds <= 15) return 100;
+  if (ageSeconds <= 30) return 90;
+  if (ageSeconds <= 60) return 70;
+  if (ageSeconds <= 120) return 50;
+  if (ageSeconds <= 300) return 30;
+  return 15;
 }
 
 /**
@@ -171,17 +222,17 @@ export function getRankedDecisions(
     const avgTechnicalScore = items.reduce((sum, i) => sum + i.technicalScore, 0) / items.length;
     const avgRecency = items.reduce((sum, i) => sum + calculateRecencyBoost(i.timestamp), 0) / items.length;
     
-    // Weighted total score
+    // Weighted total score (40% technical, 35% recency, 25% volume)
     const totalScore = 
-      (avgTechnicalScore * 0.4) + // Technical depth: 40%
-      (avgRecency * 0.35) +       // Recency: 35%
-      (Math.min(frequency * 10, 100) * 0.25); // Volume: 25% (capped)
+      (avgTechnicalScore * 0.4) +
+      (avgRecency * 0.35) +
+      (Math.min(frequency * 10, 100) * 0.25);
 
     // Confidence score based on agreement and technical depth
     const confidenceScore = Math.min(100, 
-      (frequency * 15) + // More people = more confidence
-      (avgTechnicalScore * 0.5) + // Technical suggestions are more reliable
-      (avgRecency * 0.2) // Recent consensus matters
+      (frequency * 12) +
+      (avgTechnicalScore * 0.5) +
+      (avgRecency * 0.15)
     );
 
     // Determine highest intent level in group
@@ -246,7 +297,7 @@ export interface Poll {
 }
 
 export interface PollVote {
-  odllId: string;
+  pollId: string;
   option: 'A' | 'B';
   userId: string;
   timestamp: number;
