@@ -1,128 +1,189 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Music, CheckCircle, Play, Mic2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Headphones, Users, Zap, Shield, BarChart3, Radio, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
-export default function App() {
-  // 1. STATES
-  const [energyScore, setEnergyScore] = useState(30);
-  const [signalActive, setSignalActive] = useState(false);
-  const [lyrics, setLyrics] = useState("Drowning in the neon lights, looking for a sign...");
-  const [suggestions] = useState([
-    { id: 1, text: "Change 'Neon' to 'Midnight'", votes: 15 },
-    { id: 2, text: "Increase reverb on vocals", votes: 9 }
-  ]);
+const features = [
+  {
+    icon: Shield,
+    title: 'Noise-Gate AI',
+    description: 'Filters low-intent noise ("LFG", "🔥") from high-intent technical feedback automatically.'
+  },
+  {
+    icon: BarChart3,
+    title: 'Global Ranking',
+    description: 'Real-time weighted algorithm ranks suggestions by technical depth, recency, and volume.'
+  },
+  {
+    icon: Zap,
+    title: 'Instant A/B Polls',
+    description: 'Trigger micro-decisions to your audience. Get instant results on your choices.'
+  },
+  {
+    icon: Users,
+    title: 'Crowd Intelligence',
+    description: 'Turn thousands of opinions into actionable, ranked decisions in real-time.'
+  }
+];
 
-  // 2. LOGIC FUNCTIONS
-  const handleEnergyBoost = () => {
-    setEnergyScore(prev => Math.min(prev + 5, 100));
-  };
-
-  const triggerSignal = () => {
-    setSignalActive(true);
-    setTimeout(() => setSignalActive(false), 1500);
-  };
-
-  const applyEdit = (newWord) => {
-    setLyrics(lyrics.replace("neon", newWord.toLowerCase()));
-  };
-
-  // 3. DYNAMIC BACKGROUND LOGIC
-  const getBgStyle = () => {
-    if (energyScore > 80) return "from-purple-900 via-blue-900 to-cyan-900";
-    if (energyScore > 50) return "from-slate-900 via-indigo-900 to-slate-950";
-    return "from-[#0a0a0a] to-[#121212]";
-  };
-
+export default function Index() {
   return (
-    <div className={`min-h-screen transition-all duration-1000 bg-gradient-to-br ${getBgStyle()} text-white p-6 font-sans`}>
-      
-      {/* HEADER SECTION */}
-      <header className="max-w-7xl mx-auto flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-black tracking-tighter italic">LIVE STUDIO PRO</h1>
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col items-end">
-             <span className="text-[10px] text-cyan-400 uppercase font-bold tracking-widest">Global Energy</span>
-             <div className="w-32 h-1.5 bg-white/10 rounded-full mt-1 overflow-hidden">
-                <motion.div animate={{ width: `${energyScore}%` }} className="h-full bg-cyan-500 shadow-[0_0_10px_#06b6d4]" />
-             </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
         
-        {/* LEFT: PRODUCER STAGE & EDITOR (8 Cols) */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Live Video Placeholder */}
-          <div className="relative aspect-video bg-black/40 rounded-3xl border border-white/5 overflow-hidden backdrop-blur-xl">
-             <div className="absolute inset-0 flex items-center justify-center opacity-20">
-                <Play size={80} />
-             </div>
-             <div className="absolute top-4 left-4 bg-red-600 px-3 py-1 rounded-full text-[10px] font-bold animate-pulse">LIVE</div>
-          </div>
+        {/* Grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `
+              linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px),
+              linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }}
+        />
 
-          {/* DECISION EDITOR (Alfred's Requirement) */}
-          <div className="bg-white/5 p-6 rounded-3xl border border-white/10 backdrop-blur-md">
-            <h3 className="text-sm font-bold uppercase tracking-widest text-white/40 mb-4 flex items-center gap-2">
-              <Mic2 size={16} /> Decision Editor
-            </h3>
-            <div className="text-2xl font-medium mb-6">"{lyrics}"</div>
-            <div className="space-y-3">
-              {suggestions.map(s => (
-                <div key={s.id} className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 group hover:border-cyan-500/50 transition">
-                  <span className="text-sm text-white/70">Suggestion: <b className="text-white">{s.text}</b></span>
-                  <button onClick={() => applyEdit("Midnight")} className="bg-white text-black text-[10px] font-bold px-4 py-2 rounded-lg hover:bg-cyan-400 transition">APPLY</button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT: RANKING & CONTROLS (4 Cols) */}
-        <div className="lg:col-span-4 space-y-6">
-           <div className="bg-white/5 p-6 rounded-3xl border border-white/10 h-full">
-              <h3 className="text-sm font-bold uppercase tracking-widest text-white/40 mb-6">Ranked Feedback</h3>
-              <div className="space-y-4">
-                 <div className="p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl">
-                    <p className="text-xs text-cyan-400 font-bold mb-1">MOST REQUESTED</p>
-                    <p className="text-sm">"The kick drum is clipping the master channel"</p>
-                 </div>
-                 {/* PRODUCER SIGNAL BUTTON */}
-                 <button 
-                   onClick={triggerSignal}
-                   className="w-full py-4 bg-white text-black font-black rounded-2xl hover:bg-cyan-400 transition-all active:scale-95 shadow-xl shadow-white/5"
-                 >
-                   SIGNAL AUDIENCE (ACK)
-                 </button>
-              </div>
-           </div>
-        </div>
-      </main>
-
-      {/* AUDIENCE SECTION (Hidden below for interaction) */}
-      <div className="mt-20 py-10 border-t border-white/10 flex flex-col items-center">
-         <p className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-10">Audience Interaction Zone</p>
-         <button 
-           onMouseDown={handleEnergyBoost}
-           className="w-24 h-24 rounded-full bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center shadow-[0_0_40px_rgba(6,182,212,0.3)] active:scale-90 transition"
-         >
-           <Zap fill="white" />
-         </button>
-      </div>
-
-      {/* ACKNOWLEDGMENT OVERLAY */}
-      <AnimatePresence>
-        {signalActive && (
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 pointer-events-none border-[20px] border-cyan-500/50 z-50 flex items-center justify-center"
+        <div className="relative max-w-6xl mx-auto px-6 py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
           >
-            <div className="bg-cyan-500 text-black px-8 py-3 rounded-full font-black text-xl shadow-2xl">
-               PRODUCER ACKNOWLEDGED!
+            {/* Badge */}
+            <motion.div 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Radio className="w-4 h-4 text-primary" />
+              <span className="text-sm text-primary font-medium">Real-Time Crowd Intelligence</span>
+            </motion.div>
+
+            {/* Main heading */}
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+              <span className="text-foreground">Producer-Crowd</span>
+              <br />
+              <span className="text-primary">Co-Pilot</span>
+            </h1>
+
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
+              Transform chaotic live feedback into ranked, actionable decisions. 
+              Stay in control while your crowd helps shape the sound.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/producer">
+                <Button size="lg" className="h-14 px-8 text-lg gap-2 glow-primary">
+                  <Headphones className="w-5 h-5" />
+                  Producer Dashboard
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              </Link>
+              <Link to="/audience">
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg gap-2">
+                  <Users className="w-5 h-5" />
+                  Audience View
+                </Button>
+              </Link>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+
+          {/* Dashboard Preview */}
+          <motion.div
+            className="mt-16 relative"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            <div className="studio-panel p-1 rounded-xl overflow-hidden">
+              <div className="aspect-video bg-studio-surface rounded-lg flex items-center justify-center relative overflow-hidden">
+                {/* Mock dashboard preview */}
+                <div className="absolute inset-0 p-4 grid grid-cols-12 gap-4 opacity-50">
+                  <div className="col-span-3 bg-muted/30 rounded-lg" />
+                  <div className="col-span-6 bg-muted/30 rounded-lg" />
+                  <div className="col-span-3 bg-muted/30 rounded-lg" />
+                </div>
+                
+                <div className="text-center z-10">
+                  <Headphones className="w-16 h-16 text-primary/50 mx-auto mb-4" />
+                  <p className="text-muted-foreground">Click "Producer Dashboard" to see it in action</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating cards */}
+            <motion.div
+              className="absolute -top-4 -right-4 studio-panel p-3 rounded-lg animate-pulse-glow"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-success" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium">High-Intent</p>
+                  <p className="text-xs text-muted-foreground">87% confidence</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Features Grid */}
+      <div className="max-w-6xl mx-auto px-6 py-24">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl font-bold mb-4">Studio-Grade Intelligence</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Built for producers who want crowd input without the chaos
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              className="studio-panel p-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <feature.icon className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="font-semibold mb-2">{feature.title}</h3>
+              <p className="text-sm text-muted-foreground">{feature.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="border-t border-border py-8">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Headphones className="w-5 h-5 text-primary" />
+            <span className="font-semibold">Producer Co-Pilot</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Real-time crowd intelligence for music producers
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
