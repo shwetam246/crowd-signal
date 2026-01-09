@@ -28,4 +28,11 @@ const App = () => (
   </QueryClientProvider>
 );
 
+// Background color state based on energyScore (0-100)
+const getDynamicBg = (score) => {
+  if (score > 80) return "bg-gradient-to-br from-purple-900 via-violet-800 to-blue-900 animate-pulse";
+  if (score > 50) return "bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900";
+  return "bg-[#0a0a0a]"; // Default Studio Dark
+};
+
 export default App;
