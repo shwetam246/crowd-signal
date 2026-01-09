@@ -56,13 +56,15 @@
     --studio-waveform: 185 60% 60%;
     --studio-glow: 185 100% 60%;
 
-    /* Energy gradient colors */
-    --energy-low: 222 20% 8%;
-    --energy-medium: 260 30% 15%;
-    --energy-high: 270 50% 18%;
-    --energy-peak: 270 60% 22%;
+    /* Energy gradient colors - 5 tier system */
+    --energy-tier-1: 222 20% 8%;
+    --energy-tier-2: 260 25% 12%;
+    --energy-tier-3: 270 40% 15%;
+    --energy-tier-4: 270 50% 18%;
+    --energy-tier-5: 280 55% 22%;
     --energy-purple: 270 60% 55%;
     --energy-cyan: 185 70% 50%;
+    --energy-neon: 185 100% 60%;
 
     /* Noise gate colors */
     --noise-high-intent: 150 65% 45%;
@@ -101,23 +103,42 @@
 }
 
 @layer components {
-  /* Studio Panel Styles */
+  /* Glassmorphism Studio Panel */
   .studio-panel {
-    @apply bg-card border border-border rounded-lg;
+    @apply rounded-lg border;
+    background: hsl(222 18% 10% / 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-color: hsl(var(--border) / 0.6);
     box-shadow: 
-      inset 0 1px 0 0 hsl(var(--border) / 0.3),
-      0 4px 20px -4px hsl(222 50% 3% / 0.5);
+      inset 0 1px 0 0 hsl(255 255% 255% / 0.05),
+      0 4px 24px -4px hsl(222 50% 3% / 0.6),
+      0 12px 48px -8px hsl(222 50% 3% / 0.4);
   }
 
   .studio-panel-header {
-    @apply px-4 py-2.5 border-b border-border bg-muted/30 rounded-t-lg;
+    @apply px-4 py-2.5 border-b rounded-t-lg;
+    border-color: hsl(var(--border) / 0.5);
+    background: hsl(var(--muted) / 0.3);
+  }
+
+  /* Enhanced glass panel variant */
+  .glass-panel {
+    background: hsl(222 18% 10% / 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(255 255% 255% / 0.08);
+    box-shadow: 
+      inset 0 1px 0 hsl(255 255% 255% / 0.05),
+      0 10px 40px -10px hsl(222 50% 3% / 0.5);
   }
 
   /* Glow effect for high-intent feedback */
   .high-intent-glow {
     box-shadow: 
-      0 0 20px -5px hsl(var(--studio-glow) / 0.4),
-      0 0 40px -10px hsl(var(--studio-glow) / 0.2);
+      0 0 24px -8px hsl(var(--studio-glow) / 0.5),
+      0 0 48px -12px hsl(var(--studio-glow) / 0.3),
+      inset 0 0 0 1px hsl(var(--studio-highlight) / 0.2);
     border-color: hsl(var(--studio-highlight) / 0.5);
   }
 
@@ -166,37 +187,41 @@
 
   /* Poll option button */
   .poll-option {
-    @apply relative px-6 py-4 rounded-lg border-2 border-border bg-card 
+    @apply relative px-6 py-4 rounded-lg border-2 bg-card 
            transition-all duration-200 cursor-pointer;
+    border-color: hsl(var(--border));
   }
 
   .poll-option:hover {
-    @apply border-primary/50 bg-primary/5;
+    border-color: hsl(var(--primary) / 0.5);
+    background: hsl(var(--primary) / 0.05);
   }
 
   .poll-option.selected {
-    @apply border-primary bg-primary/10;
-    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.4);
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.1);
+    box-shadow: 0 0 24px -8px hsl(var(--primary) / 0.4);
   }
 
   /* Ranking table row */
   .ranking-row {
-    @apply px-4 py-3 border-b border-border/50 transition-all duration-200;
+    @apply px-4 py-3 border-b transition-all duration-200;
+    border-color: hsl(var(--border) / 0.5);
   }
 
   .ranking-row:hover {
-    @apply bg-muted/30;
+    background: hsl(var(--muted) / 0.3);
   }
 
   .ranking-row.highlighted {
-    @apply bg-primary/10;
+    background: hsl(var(--primary) / 0.15);
     animation: highlight-pulse 2s ease-out;
   }
 
   @keyframes highlight-pulse {
     0% {
-      background-color: hsl(var(--primary) / 0.25);
-      box-shadow: inset 0 0 20px hsl(var(--primary) / 0.2);
+      background-color: hsl(var(--primary) / 0.3);
+      box-shadow: inset 0 0 24px hsl(var(--primary) / 0.25);
     }
     100% {
       background-color: hsl(var(--primary) / 0.1);
@@ -210,21 +235,37 @@
   }
 
   .intent-badge.high {
-    @apply bg-success/20 text-[hsl(var(--success))];
+    background: hsl(var(--success) / 0.2);
+    color: hsl(var(--success));
   }
 
   .intent-badge.medium {
-    @apply bg-warning/20 text-[hsl(var(--warning))];
+    background: hsl(var(--warning) / 0.2);
+    color: hsl(var(--warning));
   }
 
   .intent-badge.low {
     @apply bg-muted text-muted-foreground;
   }
 
+  /* Section badge */
+  .section-badge {
+    @apply px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wider;
+    background: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary));
+  }
+
   /* Mobile touch-optimized buttons */
   .touch-button {
     @apply min-h-[48px] min-w-[48px] flex items-center justify-center 
            rounded-xl active:scale-95 transition-transform;
+  }
+
+  /* Active line highlight */
+  .lyric-line-active {
+    @apply relative;
+    border-left: 3px solid hsl(var(--primary));
+    background: hsl(var(--primary) / 0.08);
   }
 }
 
@@ -246,31 +287,42 @@
   }
 
   .glow-primary {
-    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.5);
+    box-shadow: 0 0 24px -8px hsl(var(--primary) / 0.5);
   }
 
   .glow-success {
-    box-shadow: 0 0 15px -5px hsl(var(--success) / 0.5);
+    box-shadow: 0 0 20px -8px hsl(var(--success) / 0.5);
   }
 
-  /* Acknowledge flash animation */
+  /* Acknowledge flash animation - enhanced */
   @keyframes acknowledge-flash {
     0% {
       opacity: 0;
-      background-color: hsl(var(--primary));
+      transform: scale(1);
     }
-    30% {
-      opacity: 0.6;
-      background-color: hsl(var(--primary));
+    20% {
+      opacity: 0.7;
+      transform: scale(1.02);
     }
     100% {
       opacity: 0;
-      background-color: transparent;
+      transform: scale(1);
     }
   }
 
   .acknowledge-flash {
     animation: acknowledge-flash 0.5s ease-out forwards;
+  }
+
+  /* Screen shake for acknowledge */
+  @keyframes screen-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+  }
+
+  .screen-shake {
+    animation: screen-shake 0.4s ease-out;
   }
 
   /* Energy pulse for high-energy state */
@@ -285,5 +337,59 @@
 
   .energy-high-pulse {
     animation: energy-pulse 2s ease-in-out infinite;
+  }
+
+  /* Lightning flicker for peak energy */
+  @keyframes lightning-flicker {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+    75% { opacity: 0.1; }
+  }
+
+  .lightning-flicker {
+    animation: lightning-flicker 0.3s ease-in-out infinite;
+  }
+
+  /* Haptic pulse simulation */
+  @keyframes haptic-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+  }
+
+  .haptic-pulse {
+    animation: haptic-pulse 0.1s ease-out;
+  }
+
+  /* Float up animation for +energy numbers */
+  @keyframes float-up {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-60px) scale(0.8);
+    }
+  }
+
+  .float-up {
+    animation: float-up 0.8s ease-out forwards;
+  }
+
+  /* Particle burst */
+  @keyframes particle-burst {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--tx), var(--ty)) scale(0);
+      opacity: 0;
+    }
+  }
+
+  .particle-burst {
+    animation: particle-burst 0.6s ease-out forwards;
   }
 }
